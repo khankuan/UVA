@@ -1,0 +1,340 @@
+Acknowledgement: Competitive Programming 2 (By Steven Halim and Felix Halim)
+
+
+Union-Find Disjoint Set
+-	Find which set an item belongs to (Almost O(1))
+- Union operation to union 2 sets
+
+
+Segment Tree
+- Dynamic Range Query (Minimum element with a range in array)
+- O(nlogn) construction
+- O(logn) query
+- O(logn) update
+
+
+Fenwick Tree(Binary Indexed Tree)
+- Cumulative frequency table
+- O(logn) update
+- O(logn) query
+
+
+Bisection Method
+- Binary search on solution
+- logn
+
+
+Greedy
+- Optimal sub-structure
+
+
+Dynamic Programming
+- Optimal sub-structure
+- Recurring sub proglems
+- Top Down:
+	- Define terminating conditions
+	- Memoise states
+	- Computes only necessary states to reach target
+- Bottom Up:
+	- Iterative
+	- Memory saving
+	- Has to compute all states
+	
+
+Least increasing Subsequence
+-	n states
+- Each state O(n)
+- LIS(i) = 1 + max(LIS(j)) for j < i
+
+
+Max sum
+- Sum table of sum from (0,0) to (i,j)
+- O(n) construction
+- O(1) query
+
+
+0-1 Knapsack
+- O(n*Budget) states
+
+
+Travelling Salesman (TSP)
+- Memoise (Location, Visited Locations Bitmask)
+- O(n^2 * 2^n)
+
+
+Depth first search
+- Traverse graph by depth
+- Visited bitmask for tracking
+
+
+Breath first search
+- Traverse graph by breath
+- Visited bitmask (or dist)
+- O(V+E)
+- Also SSSP for a tree
+
+
+Topological Sort
+- Directed Acyclic Graph
+- Linear ordering of vertices
+- Use DFS, add vertex in when backtracking from it
+- Reverse ordering array at the end of DFS
+
+
+Bipartie Graph Check
+- BFS
+- Instead of storing dist, store color
+
+
+Articulation point/Bridge
+- Vertices or edges that will disconnect a graph when removed
+- DFS with array to check parent indices
+- After DFS on each vertex, for each neighbor, check if:
+	- parent >= index(self), then it is an articulation point
+	- parent > index(neighbor), then the connecting edge is an articulation bridge
+	
+	
+Strongly Connected Components
+- Directed Graphs
+- Path between any 2 vertices in the component
+- Using articulation point
+- Print vertices when backtracking, the list printed is a set of SCC
+
+
+Kruskal
+- Minimum Spanning Tree (MST)
+- Sort edges by weight
+- All vertices in disjoint set
+- For each edge, if vertices not in the same set
+	- Include edge to MST
+	- union both vertices
+- O(E logV)
+
+
+Prims
+- Minimum Spanning Tree (MST)
+- taken[V] to keep track if vertex is visited
+- Priority Queue to store order of expansion
+- Take first vertex, add all edges to PQ
+	- For each edge in PQ
+		- if other vertex is not taken, include edge to MST
+		- Add all its edges to PQ
+		- Repeat until PQ is empty
+- O(E logV)
+
+
+Minimax
+- Finding minimum of maximum edge weight among all paths between 2 vertices
+- Maximum edge in MST
+
+
+Dijkstra SSSP
+- Single source shortest path
+- PQ to sort (Dist, index)
+- while(PQ is not empty)
+	- if (d == dist[u]) //	make sure lowest pair is taken as PQ can contain outdated dist
+		- for all neighbors of u
+			- if neighbor gets shorter route by going through u
+				- Update dist[neighbor]
+				- Push (dist[neighbor], neighbor) into PQ
+- O(E logV)
+
+
+Bellman Ford
+- Detect negative cycle
+
+
+Floyd Warshall APSP
+- All pairs shortest path
+- For k, for i, for j
+	- adjMat[i][j] = min(adjMat[i][j], adjMat[i][k] + adjMat[k][j])
+- O(V^3)
+- Printing path:
+	- DoPrint(i,j): 
+			if (i != j) 
+				DoPrint(i, p[i][j])
+			printf(j)
+- Transitive closure: d[i][j] = d[i][j] | (d[i][k] & d[k][j])
+- Minimax (or Maximin): d[i][j] = min(d[i][j], max(d[i][k], d[k][j]))
+- Negative cycle: If any adjMat[i][i] < 0
+
+
+Edmund's Krap
+- O(V^3 E) with adjMat
+- Maximum Flow
+- BFS until no flow is available
+	- After each BFS, augment
+	- Augment: Recursive call to find minimum edge (with weight f) between a path between s and t
+	- Add f to maxflow
+	- Reduce each edge along path by f
+- Maxflow is also min-cut
+- Multi-source, multi-sink: Join add source to a master source and all sinks to a master sink
+- Maximum Independent Paths: Set each edge capacity to 1
+- Min-cost Max flow
+	- Each edge have a cost
+	- Replace BFS with dijkstra
+	
+	
+Counting Paths on DAG
+- Toposort
+- numPaths[0] = 1
+- For each vertex in toposort order
+	- For each neighbor of vertex
+		- numPaths[neighbor] += numPaths[cur]
+		
+		
+SSSP on DAG
+- Toposort
+- Relax edges in toposort order
+- O(V+E)
+
+		
+Minimum Vertex Cover on Tree
+- Number of vertices to cover a tree (covered by itself or at least 1 neighbor)
+- DP with memo
+- MVC(V, flag):
+		if (flag == 0)
+			take all child
+		else
+			take self
+		if (vertex is leaf)
+			return
+			
+
+Sieve of Eratosthenes
+- Generating prime numbers
+- isPrime[0] = isPrime[1] = 0
+- For i from 2 to sieve_size
+	- if isPrime[i]
+		- Set isPrime[j] = 0 for all multiples of i starting from i * i
+		
+
+Greatest Common Divisor
+- int gcd(int a, int b) { return b == 0 ? a : gcd(b, a%b));}
+
+
+Lowest Common Multipler
+- int lcm(int a, int b){return (a * (b / gcd(a, b)));}
+
+
+Extended Euclid
+- Solve Linear Diophantine Equation
+- void extendedEuclid(int a, int b):
+	if (b == 0){ x = 1; y = 0; d = a; return;
+	extendedEuclid(b, a%b);
+	int x1 = y;
+	int y1 = x - (a/b)*y;
+	x = x1;
+	y = y1;
+	
+	
+Cycling Finding
+- Tortoise move 1x speed, hare move 2x speed
+- Length of cycle = iterations to meet (same value)
+- When they have the same value
+	- Move hare to the start while keeping tortoise
+	- Move hare and tortoise one step at a time
+	- When they meet again, it will be the start of the cycle
+	- Because tortoise will take k steps to return to same place and hare will take k steps to reach as well
+	
+
+Powers of square matrix
+[1 1]^p = [fib(p+1) fib(p)]
+[1 0]     [fib(p) fib(p-1)]
+- O(logp)
+
+
+Efficient Exponent
+- int fastExp(int base, int p):
+	if (p == 0) return 1;
+	else if (p == 1) return base;
+	else {
+		int res = fastExp(base, p/2);
+		res *= res;
+		if (p % 2 == 1) res *= base;
+		return res;
+	}
+- O(logp)
+
+
+KMP (String Matching)
+- Preprocessing step:
+	- Reset table to determine where to start comparing from if a mistake in the string matching occurs
+	- O(n) where n is the length of the search word
+- Search step
+	- Similar to preprocessing step
+	- O(k) where k is the length of the string to search in
+	
+	
+Edit Distance (Levenshtein Distance)
+- Check distance from one string to another
+- DP
+- V(i,j): Score of optimal alignment between prefix A[1..i] and B[1..j]
+- Score(C1,C2) is a function that returns the score if character C1 is aligned with character C2
+- Base case:
+	- V(0,0) = 0
+	- V(i, 0) = i * score(A[i],_)	//	delete substring A[0..i]
+	- V(0, j) = j * score(_,B[j])	//	insert spaces in B[0..j]
+- Recurrence:
+	- option1: V(i-1,j-1) + score(A[i], B[j])	//	score for match or mismatch
+	- option2: V(i-1, j) + score(A[i],_)			//	delete A[i]
+	- option3: V(i,j-1) + score(_,B[j])				//	insert B[j]
+	
+	
+Longest Common Subsequence
+- Edit distance
+- Set mismatch score to negative infinity
+
+
+Suffix Tree
+- k is the number of symbols
+- O(kn lg n) space
+- O(n) construction, but tricky implementation
+- String matching
+	- m is length of string pattern
+	- O(m + occurrences)
+- Longest Repeated Substring
+	- O(n)
+- Longest Common Substring
+	- Construct suffix tree by combining both strings
+	- O(n)
+	
+
+Suffix Array
+- O(n lg n) contruction
+- O(n lg n) space
+- Counting sort
+- String Matching
+	- m is length of string to search
+	- O(m lg n)
+	- Binary search
+- Longest Common Prefix
+	- O(n)
+- Longest Common Substring
+	- O(n)
+
+	
+Area of Polygon
+- O(n)
+
+
+Point in polygon
+- O(n)
+- Sum of angles = 2pi
+
+
+Cut Polygon
+- O(n)
+
+
+Graham's Scan
+- Convex Hull
+- O(n lg n)
+
+
+Meet in the middle
+- Find path from source to destination
+- Naive Solution: k^d, where k is branch size and d is distance to destination
+- MITM Solution: k^(d/2) * 2
+- Branch from source to half the distance d, then branch from destination.
+- Also possible to branch from both sides simultaneously
